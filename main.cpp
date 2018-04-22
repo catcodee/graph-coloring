@@ -157,7 +157,7 @@ public:
     void record(ofstream & f);
     void copy(const TabuSearch &x)
     {
-        int v,c,j;
+        int v,c;
           fbest = x.fbest;                  //最好的冲突边数
             fs = x.fs;       //当前冲突边数
             seed = x.seed;     //随机种子
@@ -310,7 +310,7 @@ void TabuSearch::findmove()
 
         }
         delt = Tabudelt_min;
-        cout<<"解禁成功"<<endl;
+        //cout<<"解禁成功"<<endl;
     }
     else{
             if(same > 0)
@@ -398,13 +398,13 @@ void TabuSearch::run(int mode, int maxiter,int minfs)
             }
             break;
         case 2:
-            while ((fs > minfs)&&(fs > 0))
+            while ((fs >= minfs)&&(fs > 0))
             {
                 iter++;
                 findmove();
                 makemove();
-                if ((iter % 1000000) == 0)
-                    cout << fbest << endl;
+                /*if ((iter % 1000000) == 0)
+                    cout << fbest << endl;*/
             }
             break;
         default: cout<<"input correct mode 0,1,2"<<endl;
@@ -442,7 +442,7 @@ public:
     void get_sol(int * p);
     void clear()
     {
-        int v,c1,c2,c;
+
         vector<vector<int> > & p1 = p[0];
         vector<vector<int> > & p2 = p[1];
         p1.clear();
@@ -467,7 +467,7 @@ public:
 
 void Evolution::initialization(int s1[],int s2[])
 {
-    int v,c1,c2,c;
+    int v,c1,c2;
     vector<vector<int> > & p1 = p[0];
     vector<vector<int> > & p2 = p[1];
 
@@ -662,10 +662,13 @@ public:
         n(a),initialiter(b),maxiter(c)
     {
         int i;
+
         s = new TabuSearch[n];
+        t = clock();
         for ( i = 0; i < n; i++)
         {
             s[i].run(1,initialiter,0);
+            cout<<i+1<<"号完成！"<<endl;
 
         }
         _count = 0;
@@ -678,7 +681,7 @@ public:
     void run()
     {
         int i;
-        t = clock();
+
         while(1)
         {
             min1 = 10000000;
@@ -717,6 +720,7 @@ public:
                 evol.get_sol(sol1);
                 child.initial(sol1);
                 child.run(1,maxiter,0);
+                cout<<child.f()<<endl;
                 if(child.f() < max1)
                 {
                     s[max1pos].copy(child);
@@ -734,6 +738,17 @@ public:
                 break;
             }
         }
+    }
+    void record(ofstream & f)
+    {
+        int i;
+        f<<n<<"|"<<initialiter<<"|"<<maxiter<<"|"<<t<<"|";
+        s[min1pos].get_sol(sol1);
+        for(i = 0; i < ::N;i++)
+        {
+            f<<sol1[i]<<"   ";
+        }
+        f<<endl;
     }
 };
 
@@ -824,12 +839,10 @@ void createGraph(int color,const string &s)
 }
 int main()
 {
-    int sol1[1000];
-    int sol2[1000];
+
     int color;
     int choice;
-    clock_t time;
-    int i,min1 = 1000000,min2 = 1000000,min1_pos,min2_pos;
+
     ofstream ofile("./output.txt", ios::app);
     string s[10] = {
         "./DSJC125.1.col",
@@ -888,14 +901,15 @@ int main()
         obj.run(0,0,0);
         obj.get_fs();
         obj.record(ofile);
+        obj.showsol();
         obj.free_alloc();
     }
 
     else{
 
-        Population p(10,1000000,100000);
+        Population p(10,100000,100000);
         p.run();
-
+        p.record(ofile);
     }
 
     free_alloc();
