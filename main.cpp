@@ -7,21 +7,21 @@
 using namespace std;
 class TabuSearch;
 class Evolution;
-int N;       //½ÚµãÊı
-int k;       //ÑÕÉ«Êı
-int **g;     //ÁÚ½Ó±í
-int *v_edge; //Ã¿¸ö½ÚµãµÄÁÚ½Ó±ßÊı
+int N;       //èŠ‚ç‚¹æ•°
+int k;       //é¢œè‰²æ•°
+int **g;     //é‚»æ¥è¡¨
+int *v_edge; //æ¯ä¸ªèŠ‚ç‚¹çš„é‚»æ¥è¾¹æ•°
 
 class TabuSearch{
 private:
 
-    int *sol;                   //½Úµã¶ÔÓ¦ÑÕÉ«£¬¼´½â
-    int **TabuTenure;           //½û¼É±í
-    int **Adjacent_Color_Table; //ÁÚ½ÓÑÕÉ«±í
+    int *sol;                   //èŠ‚ç‚¹å¯¹åº”é¢œè‰²ï¼Œå³è§£
+    int **TabuTenure;           //ç¦å¿Œè¡¨
+    int **Adjacent_Color_Table; //é‚»æ¥é¢œè‰²è¡¨
 
-    int fbest;                  //×îºÃµÄ³åÍ»±ßÊı
-    int fs;       //µ±Ç°³åÍ»±ßÊı
-    unsigned int seed;     //Ëæ»úÖÖ×Ó
+    int fbest;                  //æœ€å¥½çš„å†²çªè¾¹æ•°
+    int fs;       //å½“å‰å†²çªè¾¹æ•°
+    unsigned int seed;     //éšæœºç§å­
     long iter = 0; //
     int u;
     int delt;
@@ -56,7 +56,7 @@ public:
         for (v = 0; v < ::N; v++)
         {
             sol[v] = 1 + rand() % (::k);
-            //cout << sol[v] << "    "; //½á¹ûÏÔÊ¾
+            //cout << sol[v] << "    "; //ç»“æœæ˜¾ç¤º
 
         }
         cout<<endl;
@@ -71,7 +71,7 @@ public:
         for (v = 0; v < ::N; v++)
         {
             sol[v] = p[v];
-            //cout << sol[v] << "    "; //½á¹ûÏÔÊ¾
+            //cout << sol[v] << "    "; //ç»“æœæ˜¾ç¤º
 
         }
 
@@ -83,7 +83,7 @@ public:
         for (v = 0; v < ::N; v++)
             for (c = 0; c < ::k; c++)
             {
-                TabuTenure[v][c] = 0;           //³õÊ¼»¯½û¼É±í
+                TabuTenure[v][c] = 0;           //åˆå§‹åŒ–ç¦å¿Œè¡¨
                 Adjacent_Color_Table[v][c] = 0;
             }
         for (v = 0; v < ::N; v++)                 //
@@ -117,7 +117,7 @@ public:
 
     void showcolortable(){
         int v, c;
-        for (v = 0; v < ::N; v++) //²é¿´ÑÕÉ«±í
+        for (v = 0; v < ::N; v++) //æŸ¥çœ‹é¢œè‰²è¡¨
         {
             cout << v + 1 << "    ";
             for (c = 0; c < ::k; c++)
@@ -129,7 +129,7 @@ public:
     void showtabutable()
     {
         int v,  j;
-        for (v = 0; v < ::N; v++) //²é¿´ÑÕÉ«±í
+        for (v = 0; v < ::N; v++) //æŸ¥çœ‹é¢œè‰²è¡¨
         {
             cout << v + 1 << "    ";
             for (j = 0; j < ::k; j++)
@@ -158,9 +158,9 @@ public:
     void copy(const TabuSearch &x)
     {
         int v,c,j;
-          fbest = x.fbest;                  //×îºÃµÄ³åÍ»±ßÊı
-            fs = x.fs;       //µ±Ç°³åÍ»±ßÊı
-            seed = x.seed;     //Ëæ»úÖÖ×Ó
+          fbest = x.fbest;                  //æœ€å¥½çš„å†²çªè¾¹æ•°
+            fs = x.fs;       //å½“å‰å†²çªè¾¹æ•°
+            seed = x.seed;     //éšæœºç§å­
             iter = x.iter; //
             u = x.u;
             delt = x.delt;
@@ -168,7 +168,7 @@ public:
            for (v = 0; v < ::N; v++)
                 for (c = 0; c < ::k; c++)
                 {
-                    TabuTenure[v][c] = x.TabuTenure[v][c];           //³õÊ¼»¯½û¼É±í
+                    TabuTenure[v][c] = x.TabuTenure[v][c];           //åˆå§‹åŒ–ç¦å¿Œè¡¨
                     Adjacent_Color_Table[v][c] = x.Adjacent_Color_Table[v][c];
                 }
             for (v = 0; v < ::N; v++)
@@ -206,7 +206,7 @@ void TabuSearch::free_alloc()
 
 }
 
-void TabuSearch::get_fs() //µÃµ½³åÍ»±ßÊı
+void TabuSearch::get_fs() //å¾—åˆ°å†²çªè¾¹æ•°
 {
     int v = 0;
     int s = 0;
@@ -215,45 +215,45 @@ void TabuSearch::get_fs() //µÃµ½³åÍ»±ßÊı
     fbest = fs = s / 2;
     cout << "fs =" << fs << endl;
 }
-int TabuSearch::f() //µÃµ½³åÍ»±ßÊı
+int TabuSearch::f() //å¾—åˆ°å†²çªè¾¹æ•°
 {
     return fs;
 }
 
 /************************************************
-Ñ°ÕÒ×îÓÅ¶¯×÷
-int & u: ĞèÒª×ª±äÑÕÉ«µÄ½Úµã
-int & c_current ×ª»¯Ç°µÄÑÕÉ«
-int & c_change Òª×ª»¯µÄÑÕÉ«
-int & delt ×ª»¯ºó³åÍ»±ßµÄ¸Ä±äÊı
+å¯»æ‰¾æœ€ä¼˜åŠ¨ä½œ
+int & u: éœ€è¦è½¬å˜é¢œè‰²çš„èŠ‚ç‚¹
+int & c_current è½¬åŒ–å‰çš„é¢œè‰²
+int & c_change è¦è½¬åŒ–çš„é¢œè‰²
+int & delt è½¬åŒ–åå†²çªè¾¹çš„æ”¹å˜æ•°
 *************************************************/
 
 void TabuSearch::findmove()
 {
-    int v = 0; //½Úµã
+    int v = 0; //èŠ‚ç‚¹
 
     int c_current, c_change;
-    int delt_min = 100, Tabudelt_min = 100, delt_current; //ÉèÎª½Ï´óÖµ£¬È·±£µÚÒ»´Î¸üĞÂ»ñµÃÕıÈ·Öµ
+    int delt_min = 100, Tabudelt_min = 100, delt_current; //è®¾ä¸ºè¾ƒå¤§å€¼ï¼Œç¡®ä¿ç¬¬ä¸€æ¬¡æ›´æ–°è·å¾—æ­£ç¡®å€¼
 
     int same = 0, tabu_same = 0;
     int elect;
     int deltbest = fbest - fs;
     for (v = 0; v < N; v++)
     {
-        c_current = sol[v] - 1;                   //»ñÈ¡µ±Ç°½ÚµãÑÕÉ«
-        if(Adjacent_Color_Table[v][c_current] > 0)//°ó¶¨ÊÇ·ñÓĞ³åÍ»±ß
+        c_current = sol[v] - 1;                   //è·å–å½“å‰èŠ‚ç‚¹é¢œè‰²
+        if(Adjacent_Color_Table[v][c_current] > 0)//ç»‘å®šæ˜¯å¦æœ‰å†²çªè¾¹
         {
             for (c_change = 0; c_change < ::k; c_change++)
             {
-                if ((c_change + 1) != sol[v])            //¸ü¸ÄÎªÆäËûÑÕÉ«£¬¼ÆËãdelt
+                if ((c_change + 1) != sol[v])            //æ›´æ”¹ä¸ºå…¶ä»–é¢œè‰²ï¼Œè®¡ç®—delt
                 {
 
                     delt_current = -Adjacent_Color_Table[v][c_current] + Adjacent_Color_Table[v][c_change];
-                                    //¼õÈ¥µ±Ç°ÑÕÉ«³ğÈËÊı£¬¼ÓÉÏÒª±ä³ÉµÄÑÕÉ«µÄ³ğÈËÊı
+                                    //å‡å»å½“å‰é¢œè‰²ä»‡äººæ•°ï¼ŒåŠ ä¸Šè¦å˜æˆçš„é¢œè‰²çš„ä»‡äººæ•°
 
-                    if (TabuTenure[v][c_change] < iter)   //Èô¸Ã¶¯×÷·Ç½û¼É
+                    if (TabuTenure[v][c_change] < iter)   //è‹¥è¯¥åŠ¨ä½œéç¦å¿Œ
                     {
-                        if (delt_current < delt_min)      //ÈôÎªÎª·Ç½û¼É×îºÃÔò¸üĞÂ·Ç½û¼É×îºÃ
+                        if (delt_current < delt_min)      //è‹¥ä¸ºä¸ºéç¦å¿Œæœ€å¥½åˆ™æ›´æ–°éç¦å¿Œæœ€å¥½
                         {
                             sameList[0][0] = v;
                             //nTabu_v1 = c_
@@ -270,9 +270,9 @@ void TabuSearch::findmove()
                             //delt_min = delt_current;
                         }
                     }
-                    else                                  //Èô¸Ã¶¯×÷Îª½û¼É
+                    else                                  //è‹¥è¯¥åŠ¨ä½œä¸ºç¦å¿Œ
                     {
-                        if (delt_current < Tabudelt_min)   //ÈôÎª½û¼É×îºÃ£¬¸üĞÂ½û¼É×îºÃ
+                        if (delt_current < Tabudelt_min)   //è‹¥ä¸ºç¦å¿Œæœ€å¥½ï¼Œæ›´æ–°ç¦å¿Œæœ€å¥½
                         {
                             tabu_sameList[0][0] = v;
                             //Tabu_v1 = c_curren
@@ -310,7 +310,7 @@ void TabuSearch::findmove()
 
         }
         delt = Tabudelt_min;
-        cout<<"½â½û³É¹¦"<<endl;
+        cout<<"è§£ç¦æˆåŠŸ"<<endl;
     }
     else{
             if(same > 0)
@@ -329,7 +329,7 @@ void TabuSearch::findmove()
             delt = delt_min;
     }
 
-    //¼ìÑé
+    //æ£€éªŒ
 
     /*cout<<"u = "<<u+1<<endl;
     cout<<"u_color"<<sol[u]<<endl;
@@ -358,14 +358,14 @@ void TabuSearch::makemove()
 
     TabuTenure[u][v1] = fs + iter + rand() % 10 + 1;
 
-    /*for (u=0; u<::N; u++) //²é¿´ÑÕÉ«±í
+    /*for (u=0; u<::N; u++) //æŸ¥çœ‹é¢œè‰²è¡¨
     {
         cout<<u+1<<"    ";
         for(j=0 ;j<::k; j++)
             cout<<Adjacent_Color_Table[u][j]<<"--";
         cout<<endl;
     }*/
-    /*for (u=0; u<::N; u++) //²é¿´½û¼É±í
+    /*for (u=0; u<::N; u++) //æŸ¥çœ‹ç¦å¿Œè¡¨
     {
         cout<<u+1<<"    ";
         for(j=0 ;j<::k; j++)
@@ -514,14 +514,14 @@ void Evolution::start()
     vector<vector<int>> *p1;
     vector<vector<int>> *p2;
 
-    for(i = 0; i < ::k; i++)    //kÖÖÑÕÉ«È¡k´Î
+    for(i = 0; i < ::k; i++)    //kç§é¢œè‰²å–kæ¬¡
     {
         choice = i%2;
         p1 = &(p[choice]);
         p2 = &(p[!choice]);
-        samenum = 0;               //Ã¿´Î½»»»p1,p2
+        samenum = 0;               //æ¯æ¬¡äº¤æ¢p1,p2
         max = 0;c = 0;
-        for (auto iter = (*p1).begin(); iter != (*p1).end(); iter++,c++) //µü´ú£¬ÕÒ³ö×î´óÑÕÉ«¼¯
+        for (auto iter = (*p1).begin(); iter != (*p1).end(); iter++,c++) //è¿­ä»£ï¼Œæ‰¾å‡ºæœ€å¤§é¢œè‰²é›†
         {
             c_size = (*iter).size();
             if (c_size >= max)
@@ -546,11 +546,11 @@ void Evolution::start()
         }
         else del = same[0];
 
-        for(auto iter1 = (*p2).begin(); iter1 != (*p2).end(); iter1++)    //p2µÚÒ»²ãµü´ú
+        for(auto iter1 = (*p2).begin(); iter1 != (*p2).end(); iter1++)    //p2ç¬¬ä¸€å±‚è¿­ä»£
         {
-            for(auto iter3 = (*p1)[del].begin(); iter3 != (*p1)[del].end(); iter3++) //ÒªÉ¾³ıµÄÑÕÉ«¼¯µü´ú
+            for(auto iter3 = (*p1)[del].begin(); iter3 != (*p1)[del].end(); iter3++) //è¦åˆ é™¤çš„é¢œè‰²é›†è¿­ä»£
             {
-                for(auto iter2 = (*iter1).begin(); iter2 != (*iter1).end(); iter2++)//p2Ä³Ò»ÑÕÉ«¼¯µÄµü´ú
+                for(auto iter2 = (*iter1).begin(); iter2 != (*iter1).end(); iter2++)//p2æŸä¸€é¢œè‰²é›†çš„è¿­ä»£
                 {
                     if(*iter2 == *iter3)
                     {
@@ -721,15 +721,15 @@ public:
                 {
                     s[max1pos].copy(child);
                     _count++;
-                    cout<<"½ø»¯´úÊı = "<<_count<<endl;
-                    cout<<"×îĞ¡±äÊı = "<<min1<<endl;
+                    cout<<"è¿›åŒ–ä»£æ•° = "<<_count<<endl;
+                    cout<<"æœ€å°å˜æ•° = "<<min1<<endl;
                 }
 
             }
             else{
-                cout<<"ÕÒµ½½â"<<endl;
+                cout<<"æ‰¾åˆ°è§£"<<endl;
                 s[min1pos].showsol();
-                cout<<"½ø»¯´úÊı = "<<_count<<endl;
+                cout<<"è¿›åŒ–ä»£æ•° = "<<_count<<endl;
                 t = clock() - t;
                 break;
             }
@@ -768,9 +768,9 @@ void createGraph(int color,const string &s)
             in.getline(buffer, 100);
             if (buffer[0] == 'p')
             {
-                for (i = 7, j = 0; buffer[i] != ' '; i++) //±ßµÄ±ê×¼¸ñÊ½Îª¡°e vi vj"Òò´Ë´Ópos=2¿ªÊ¼
-                    tmp[j++] = buffer[i];                 //µ½µÚ¶ş¸ö' '½áÊø
-                tmp[j] = '\0';                            //½áÊø×Ö·û´®
+                for (i = 7, j = 0; buffer[i] != ' '; i++) //è¾¹çš„æ ‡å‡†æ ¼å¼ä¸ºâ€œe vi vj"å› æ­¤ä»pos=2å¼€å§‹
+                    tmp[j++] = buffer[i];                 //åˆ°ç¬¬äºŒä¸ª' 'ç»“æŸ
+                tmp[j] = '\0';                            //ç»“æŸå­—ç¬¦ä¸²
 
                 N = atoi(tmp);
                 k = color;
@@ -791,30 +791,30 @@ void createGraph(int color,const string &s)
                 for(v=0;v<N;v++)
                     v_edge[v] = 0;
             }
-            if (buffer[0] == 'e') //¼Ç±ßµÄ±êÖ¾Îªe
+            if (buffer[0] == 'e') //è®°è¾¹çš„æ ‡å¿—ä¸ºe
             {
-                for (i = 2, j = 0; buffer[i] != ' '; i++) //±ßµÄ±ê×¼¸ñÊ½Îª¡°e vi vj"Òò´Ë´Ópos=2¿ªÊ¼
-                    tmp[j++] = buffer[i];                 //µ½µÚ¶ş¸ö' '½áÊø
-                tmp[j] = '\0';                            //½áÊø×Ö·û´®
+                for (i = 2, j = 0; buffer[i] != ' '; i++) //è¾¹çš„æ ‡å‡†æ ¼å¼ä¸ºâ€œe vi vj"å› æ­¤ä»pos=2å¼€å§‹
+                    tmp[j++] = buffer[i];                 //åˆ°ç¬¬äºŒä¸ª' 'ç»“æŸ
+                tmp[j] = '\0';                            //ç»“æŸå­—ç¬¦ä¸²
 
                 v1 = atoi(tmp);
 
-                for (i++, j = 0; buffer[i] != 0; i++) //ÅĞ¶ÏÌõ¼şÎªbuffer½áÊø£¬getline()ºó×Ö·û´®Ä©Î²Îª'\0'
-                    tmp[j++] = buffer[i];             //i´ÓÌáÈ¡v1ºó¿ªÊ¼
-                tmp[j] = '\0';                        //½áÊø×Ö·û´®
+                for (i++, j = 0; buffer[i] != 0; i++) //åˆ¤æ–­æ¡ä»¶ä¸ºbufferç»“æŸï¼Œgetline()åå­—ç¬¦ä¸²æœ«å°¾ä¸º'\0'
+                    tmp[j++] = buffer[i];             //iä»æå–v1åå¼€å§‹
+                tmp[j] = '\0';                        //ç»“æŸå­—ç¬¦ä¸²
 
                 v2 = atoi(tmp);
 
                 v_edge[v1 - 1]++;
-                v_edge[v2 - 1]++; //×¢ÒâposÎª½ÚµãÖµ-1
+                v_edge[v2 - 1]++; //æ³¨æ„posä¸ºèŠ‚ç‚¹å€¼-1
                 g[v1 - 1][v_edge[v1 - 1] - 1] = v2;
-                g[v2 - 1][v_edge[v2 - 1] - 1] = v1; //posÎª
+                g[v2 - 1][v_edge[v2 - 1] - 1] = v1; //posä¸º
             }
         }
     }
     in.close();
 
-    /*for (i=0,j=0; i<N; i++)                     //Éú³ÉÍ¼½á¹ûÏÔÊ¾
+    /*for (i=0,j=0; i<N; i++)                     //ç”Ÿæˆå›¾ç»“æœæ˜¾ç¤º
     {
         cout<<endl<<i+1<<"  ";
         for(j=0; j<v_edge[i]; j++)
@@ -843,7 +843,7 @@ int main()
         "./DSJC1000.5.col",
         "./DSJC1000.9.1.col",
     };
-    cout<<"Ñ¡ÔñËãÀı"<<endl;
+    cout<<"é€‰æ‹©ç®—ä¾‹"<<endl;
     cout<<"0-----"<<"./DSJC125.1.col"<<endl;
     cout<<"1-----"<<"./DSJC250.1.col"<<endl;
     cout<<"2-----"<<"./DSJC250.5.col"<<endl;
@@ -860,22 +860,22 @@ int main()
     {
         if(choice>8||choice<0)
     {
-        cout<<"ÊäÈëÕıÈ·Öµ"<<endl;continue;
+        cout<<"è¾“å…¥æ­£ç¡®å€¼"<<endl;continue;
     }
     else break;
     }
-    cout<<"ÊäÈëÑÕÉ«Êı"<<endl;
+    cout<<"è¾“å…¥é¢œè‰²æ•°"<<endl;
     cin>>color;
     createGraph(color,s[choice]);
     ofile<<s[choice]<<"|";
-    cout<<"Ñ¡ÔñËã·¨"<<endl;
-    cout<<"0-----"<<"½û¼É"<<endl;
-    cout<<"1-----"<<"»ìºÏ½ø»¯"<<endl;
+    cout<<"é€‰æ‹©ç®—æ³•"<<endl;
+    cout<<"0-----"<<"ç¦å¿Œ"<<endl;
+    cout<<"1-----"<<"æ··åˆè¿›åŒ–"<<endl;
     while(cin>>choice)
     {
         if(choice<0||choice>1)
         {
-            cout<<"ÊäÈëÕıÈ·Öµ"<<endl;continue;
+            cout<<"è¾“å…¥æ­£ç¡®å€¼"<<endl;continue;
         }
         else break;
     }
